@@ -16,8 +16,12 @@ function UsersList(props: Props) {
     useEffect(() => {
         const getUsers = async () => {
             const response = await fetch('https://exercises.getsandbox.com/users');
-            const users = await response.json();
-            setUsers(users);
+            if(response.status === 200) {
+                const users = await response.json();
+                setUsers(users);
+            } else {  
+                throw new Error(`${response.status}`);
+            }
         }
         getUsers();
     }, []);
