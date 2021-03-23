@@ -12,6 +12,7 @@ type User = {
 
 function UsersList(props: Props) {
     const [users, setUsers] = useState([]);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const getUsers = async () => {
@@ -20,6 +21,8 @@ function UsersList(props: Props) {
                 const users = await response.json();
                 setUsers(users);
             } else {  
+                let message = `There was an error retrieving user ${response.status}: ${response.statusText}.`;
+                setMessage(message);
                 throw new Error(`${response.status}`);
             }
         }
@@ -28,7 +31,10 @@ function UsersList(props: Props) {
 
     return (        
         <>
-            <h2>List of Users:</h2>
+            {
+                message.length < 1 ? "" : <span>{message}</span>;
+            }
+            <h2>List of Users:</h2>            
             <ul style={{listStyle: "none"}}>
                 {users.map((user: User) => (
                     <li key={user.id}>{`${user.lastName}, ${user.firstName}`}</li>)
