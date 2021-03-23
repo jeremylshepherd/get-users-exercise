@@ -16,14 +16,20 @@ function UsersList(props: Props) {
 
     useEffect(() => {
         const getUsers = async () => {
-            const response = await fetch('https://exercises.getsandbox.com/users');
-            if(response.status === 200) {
-                const users = await response.json();
-                setUsers(users);
-            } else {  
-                let message = `There was an error retrieving users ${response.status}: ${response.statusText}.`;
+            try {
+                const response = await fetch('https://exercises.getsandbox.com/user');            
+                if (response.status === 200) {
+                    const users = await response.json();
+                    setUsers(users);
+                } else {  
+                    let message = `There was an error retrieving users ${response.status}: ${response.statusText}.`;
+                    setMessage(message);
+                    throw new Error(`${response.status}`);
+                }
+            } catch {
+                let message = 'The was no response from API. Please check url and try again';
                 setMessage(message);
-                throw new Error(`${response.status}`);
+                throw new Error(message);
             }
         }
         getUsers();
