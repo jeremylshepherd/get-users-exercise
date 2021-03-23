@@ -21,7 +21,7 @@ function UsersList(props: Props) {
                 const users = await response.json();
                 setUsers(users);
             } else {  
-                let message = `There was an error retrieving user ${response.status}: ${response.statusText}.`;
+                let message = `There was an error retrieving users ${response.status}: ${response.statusText}.`;
                 setMessage(message);
                 throw new Error(`${response.status}`);
             }
@@ -31,9 +31,7 @@ function UsersList(props: Props) {
 
     return (        
         <>
-            {
-                message.length < 1 ? "" : <span>{message}</span>;
-            }
+            {message.length > 0 ? <div>{message}</div>: null}
             <h2>List of Users:</h2>            
             <ul style={{listStyle: "none"}}>
                 {users.map((user: User) => (
