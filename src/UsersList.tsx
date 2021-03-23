@@ -24,12 +24,12 @@ function UsersList(props: Props) {
                 } else {  
                     let message = `There was an error retrieving users ${response.status}: ${response.statusText}.`;
                     setMessage(message);
-                    throw new Error(`${response.status}`);
+                    console.error(`${response.status}`);
                 }
             } catch {
                 let message = 'The was no response from API. Please check url and try again';
                 setMessage(message);
-                throw new Error(message);
+                console.error(message);
             }
         }
         getUsers();
