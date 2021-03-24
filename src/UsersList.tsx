@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react'
 import ErrorAlert from './Components/ErrorAlert';
 import ListPanel from './Components/ListPanel';
 import GetUsersFromApi from './helpers/getUsersFromApi';
-import { User } from'./types';
+import { User } from './types';
 
 interface Props {}
-
-
 
 function UsersList(props: Props) {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        const getUsers = async () => {
+        const getUsers = async () : Promise<User[] | any> => {
             await GetUsersFromApi('https://exercises.getsandbox.com/users', setUsers, setMessage);
         }
         getUsers();
