@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import ErrorAlert from './Components/ErrorAlert';
+import ListPanel from './Components/ListPanel';
+import GetUsersFromApi from './helpers/getUsersFromApi';
+import { User } from'./types';
 
 interface Props {}
 
-type User = {
-    id: number,
-    firstName: string,
-    lastName: string,
-    email: string,
-    active: boolean
-};
+
 
 function UsersList(props: Props) {
     const [users, setUsers] = useState([]);
@@ -16,21 +14,7 @@ function UsersList(props: Props) {
 
     useEffect(() => {
         const getUsers = async () => {
-            try {
-                const response = await fetch('https://exercises.getsandbox.com/user');            
-                if (response.status === 200) {
-                    const users = await response.json();
-                    setUsers(users);
-                } else {  
-                    let message = `There was an error retrieving users ${response.status}: ${response.statusText}.`;
-                    setMessage(message);
-                    console.error(`${response.status}`);
-                }
-            } catch {
-                let message = 'The was no response from API. Please check url and try again';
-                setMessage(message);
-                console.error(message);
-            }
+            await GetUsersFromApi('https://exercises.getsandbox.com/users', setUsers, setMessage);
         }
         getUsers();
     }, []);
@@ -39,15 +23,8 @@ function UsersList(props: Props) {
         <>
             {
                 message.length > 0 ? 
-                <div style={{fontWeight:600, color:'red'}}>{message}</div>:
-                <>
-                <h2>List of Users:</h2>                    
-                <ul style={{listStyle: "none"}}>
-                    {users.map((user: User) => (
-                        <li key={user.id}>{`${user.lastName}, ${user.firstName}`}</li>)
-                    )}
-                </ul>
-                </>
+                <ErrorAlert message={message} />:
+                <ListPanel users={users} title="List of Users" />
             }
         </>
     )
